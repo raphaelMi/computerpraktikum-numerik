@@ -19,12 +19,12 @@ class Flock:
         self.directions = self.velocities / np.linalg.norm(self.velocities, axis=1, keepdims=True)
 
         if BOUNCE:
-            for i, (x, y) in enumerate(self.positions):
-                if x < 0 and self.velocities[i][0] < 0:
-                    self.velocities[i][0] *= -1
-                if y < 0 and self.velocities[i][1] < 0:
-                    self.velocities[i][1] *= -1
-                if x > self.dimensions[0] and self.velocities[i][0] > 0:
-                    self.velocities[i][0] *= -1
-                if y > self.dimensions[1] and self.velocities[i][1] > 0:
-                    self.velocities[i][1] *= -1
+            for pos, vel in zip(self.positions, self.velocities):
+                if pos[0] < 0 and vel[0] < 0:
+                    vel[0] *= -1
+                if pos[1] < 0 and vel[1] < 0:
+                    vel[1] *= -1
+                if pos[0] > self.dimensions[0] and vel[0] > 0:
+                    vel[0] *= -1
+                if pos[1] > self.dimensions[1] and vel[1] > 0:
+                    vel[1] *= -1

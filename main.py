@@ -32,8 +32,8 @@ while running:
 
     fish.do_frame(clock.get_fps())
     for pos, vec in zip(fish.positions, fish.directions):
-        pos1 = pos.astype(np.int32)
-        pos2 = (pos + 10 * vec).astype(np.int32)
+        pos1 = (pos + 10 * vec).astype(np.int32)
+        pos2 = pos.astype(np.int32)
         pg.draw.line(screen, (0, 0, 0), pos1, pos2, 5)
 
     pg.display.update()

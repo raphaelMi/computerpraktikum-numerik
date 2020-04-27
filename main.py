@@ -13,23 +13,27 @@ screen = pg.display.set_mode((screen_x, screen_y))
 # Image by https://pixabay.com/illustrations/clipart-fish-sea-water-swim-3418189/
 fish_image = pg.image.load('fish.png')
 pg.display.set_icon(fish_image)
+pg.display.set_caption("Flocking simulator")
 
-fish = Flock()
+fish = Flock(100)
 fish.positions = np.random.normal((screen_x/2, screen_y/2), 100, (fish.population, 2))
-fish.velocities = np.random.normal((0, 0), 1, (fish.population, 2))
-print(fish.positions)
+fish.velocities = np.random.normal((0, 0), 2, (fish.population, 2))
+fish.dimensions = (screen_x, screen_y)
 
 running = True
+clock = pg.time.Clock()
 while running:
+    clock.tick()
     screen.fill((255, 255, 255,))
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
 
-    fish.do_frame()
-    for pos in fish.positions:
-        pg.draw.circle(screen, (127, 127, 127), pos.astype(np.int32), 4)
-        pg.draw.circle(screen, (0, 0, 0), pos.astype(np.int32), 3)
+    fish.do_frame(clock.get_fps())
+    for pos, vec in zip(fish.positions, fish.directions):
+        pos1 = pos.astype(np.int32)
+        pos2 = (pos + 10 * vec).astype(np.int32)
+        pg.draw.line(screen, (0, 0, 0), pos1, pos2, 5)
 
     pg.display.update()

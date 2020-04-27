@@ -3,11 +3,21 @@
 import numpy as np
 import pygame as pg
 
-screen = pg.display.set_mode((800,800))
+from cucker_smale import Flock
+
+screen_x = 800
+screen_y = 600
+
+screen = pg.display.set_mode((screen_x, screen_y))
 
 # Image by https://pixabay.com/illustrations/clipart-fish-sea-water-swim-3418189/
 fish_image = pg.image.load('fish.png')
 pg.display.set_icon(fish_image)
+
+fish = Flock()
+fish.positions = np.random.normal((screen_x/2, screen_y/2), 100, (fish.population, 2))
+fish.velocities = np.random.normal((0, 0), 1, (fish.population, 2))
+print(fish.positions)
 
 running = True
 while running:
@@ -17,5 +27,9 @@ while running:
         if event.type == pg.QUIT:
             running = False
 
+    fish.do_frame()
+    for pos in fish.positions:
+        pg.draw.circle(screen, (127, 127, 127), pos.astype(np.int32), 4)
+        pg.draw.circle(screen, (0, 0, 0), pos.astype(np.int32), 3)
 
     pg.display.update()

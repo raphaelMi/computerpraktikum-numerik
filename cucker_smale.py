@@ -1,7 +1,8 @@
 import numpy as np
 
 BOUNCE = False
-LAMBDA = 100
+LAMBDA = 10
+LENGTH_FACTOR = 150
 
 
 class Flock:
@@ -15,7 +16,7 @@ class Flock:
         self.dimensions = (800, 600)
 
     def do_frame(self, millis=16.7):
-        psi = np.array([[(vel_i - vel_j) / (1 + 1 / 100 * np.linalg.norm(pos_i - pos_j) ** 2)
+        psi = np.array([[(vel_i - vel_j) / (1 + 1 / LENGTH_FACTOR**2 * np.linalg.norm(pos_i - pos_j) ** 2)
                          for pos_i, vel_i in zip(self.positions, self.velocities)]
                         for pos_j, vel_j in zip(self.positions, self.velocities)])
         # print(psi)

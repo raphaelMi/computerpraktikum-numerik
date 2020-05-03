@@ -1,6 +1,8 @@
 import numpy as np
 import pygame as pg
+
 import init
+
 
 def initialize():
     global screen
@@ -16,6 +18,7 @@ def initialize():
     if init.MOUSE_FISH:
         last_pos = np.array(pg.mouse.get_pos())
 
+
 def render_debug_information(tick_time, frame_time):
     fps = clock.get_fps()
 
@@ -26,6 +29,7 @@ def render_debug_information(tick_time, frame_time):
     screen.blit(fps_surface, (0, 0))
     screen.blit(tick_time_surface, (0, 25))
     screen.blit(frame_time_surface, (0, 45))
+
 
 def frame():
     global running
@@ -64,6 +68,7 @@ def frame():
 
     pg.display.update()
 
+
 if __name__ == "__main__":
     global running
 
@@ -73,4 +78,3 @@ if __name__ == "__main__":
 
     while running:
         frame()
-

@@ -1,9 +1,8 @@
-import numpy as np
 import pygame as pg
 
 from cucker_smale import *
 
-pg.font.init() # Init font module so we can create a font here
+pg.font.init()  # Init font module so we can create a font here
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600

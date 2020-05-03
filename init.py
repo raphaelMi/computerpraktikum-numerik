@@ -3,6 +3,8 @@ import pygame as pg
 
 from cucker_smale import *
 
+pg.font.init() # Init font module so we can create a font here
+
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
@@ -16,6 +18,7 @@ fish_image = pg.image.load('fish.png')
 
 APP_ICON = fish_image
 APP_TITLE = "Flocking Simulation ({:}x{:})".format(SCREEN_WIDTH, SCREEN_HEIGHT)
+APP_FONT = pg.font.SysFont('Comic Sans MS', 20)
 
 flock = Flock(50)
 flock.positions = np.random.normal((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 50, (flock.population, 2))

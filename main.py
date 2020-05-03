@@ -115,7 +115,7 @@ if __name__ == "__main__":
     initialize()
 
     running = True
-    pretty_render = False
+    pretty_render = True
     display_debug_screen = True
     display_bounding_boxes = False
 

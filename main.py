@@ -25,10 +25,12 @@ def render_debug_information(tick_time, frame_time):
     fps_surface = init.APP_FONT.render("FPS: {:.2}/{:}".format(fps, init.FPS_CAP), False, (0, 0, 0))
     tick_time_surface = init.APP_FONT.render("Tick time: {:} ms".format(tick_time), False, (0, 0, 0))
     frame_time_surface = init.APP_FONT.render("Frame time: {:} ms".format(frame_time), False, (0, 0, 0))
+    fish_count_surface = init.APP_FONT.render("Fish count: {:}".format(init.flock.population), False, (0, 0, 0))
 
     screen.blit(fps_surface, (0, 0))
     screen.blit(tick_time_surface, (0, 25))
-    screen.blit(frame_time_surface, (0, 45))
+    screen.blit(frame_time_surface, (0, 50))
+    screen.blit(fish_count_surface, (0, 75))
 
 
 def frame():

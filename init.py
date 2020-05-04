@@ -13,6 +13,10 @@ SCREEN_HEIGHT = 600
 
 FPS_CAP = 60
 
+REALTIME = True  # If false, the rendered frames will be saved and merged into a video with constant FPS_CAP framerate
+
+EXPORTED_VIDEO_NAME = "rendered_scene.avi"
+
 APP_ICON = fish_image
 APP_TITLE = "Flocking Simulation ({:}x{:})".format(SCREEN_WIDTH, SCREEN_HEIGHT)
 APP_FONT = pg.font.SysFont('Comic Sans MS', 20)

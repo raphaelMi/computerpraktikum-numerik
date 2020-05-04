@@ -5,7 +5,8 @@ from cucker_smale import *
 pg.font.init()  # Init font module so we can create a font here
 
 # Image by https://pixabay.com/illustrations/clipart-fish-sea-water-swim-3418189/
-fish_image = pg.image.load('fish.png')
+fish_icon = pg.image.load('fish_icon.png')
+fish_sprite = pg.image.load('fish_sprite.png')  # Scaled, and cut out
 
 # General display properties
 SCREEN_WIDTH = 800
@@ -17,7 +18,7 @@ REALTIME = True  # If false, the rendered frames will be saved and merged into a
 
 EXPORTED_VIDEO_NAME = "rendered_scene.avi"
 
-APP_ICON = fish_image
+APP_ICON = fish_icon
 APP_TITLE = "Flocking Simulation ({:}x{:})".format(SCREEN_WIDTH, SCREEN_HEIGHT)
 APP_FONT = pg.font.SysFont('Comic Sans MS', 20)
 
@@ -36,7 +37,7 @@ FISH_COLOR = (84, 84, 84)
 FISH_DIRECTION_COLOR = (0, 0, 255)
 
 # Pretty fish rendering
-FISH_SPRITE = pg.transform.smoothscale(fish_image, (FISH_WIDTH, FISH_HEIGHT))
+FISH_SPRITE = pg.transform.smoothscale(fish_sprite, (FISH_WIDTH, FISH_HEIGHT))
 
 # Flock settings
 MOUSE_FISH = False  # makes the mouse cursor behave like a fish

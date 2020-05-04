@@ -1,6 +1,7 @@
 import numpy as np
 
 BOUNCE = False
+TORUS_WORLD = True
 LAMBDA = 10
 LENGTH_FACTOR = 150
 
@@ -31,10 +32,21 @@ class Flock:
         if BOUNCE:
             for pos, vel in zip(self.positions, self.velocities):
                 if pos[0] < 0 and vel[0] < 0:
-                    vel[0] *= -1
+                    vel[0] *= -5
                 if pos[1] < 0 and vel[1] < 0:
-                    vel[1] *= -1
+                    vel[1] *= -5
                 if pos[0] > self.dimensions[0] and vel[0] > 0:
-                    vel[0] *= -1
+                    vel[0] *= -5
                 if pos[1] > self.dimensions[1] and vel[1] > 0:
-                    vel[1] *= -1
+                    vel[1] *= -5
+
+        if TORUS_WORLD:
+            for pos, vel in zip(self.positions, self.velocities):
+                if pos[0] < 0:
+                    pos[0] = self.dimensions[0]-1
+                if pos[1] < 0:
+                    pos[1] = self.dimensions[1]-1
+                if pos[0] > self.dimensions[0]:
+                    pos[0] = 1
+                if pos[1] > self.dimensions[1]:
+                    pos[1] = 1

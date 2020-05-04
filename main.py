@@ -9,6 +9,7 @@ def initialize():
     global screen
     global last_pos
     global clock
+    global video
 
     screen = pg.display.set_mode((init.SCREEN_WIDTH, init.SCREEN_HEIGHT))
     pg.display.set_icon(init.APP_ICON)
@@ -18,6 +19,10 @@ def initialize():
 
     if init.MOUSE_FISH:
         last_pos = np.array(pg.mouse.get_pos())
+
+    if not init.REALTIME:
+        video = cv2.VideoWriter(init.EXPORTED_VIDEO_NAME, cv2.VideoWriter_fourcc('Y', 'V', '1', '2'), init.FPS_CAP,
+                                (init.SCREEN_WIDTH, init.SCREEN_HEIGHT))
 
 
 def render_debug_information(tick_time, frame_time, event_time, video_time):
@@ -170,13 +175,10 @@ if __name__ == "__main__":
     display_bounding_boxes = False
     rendered_video_frames = 0
 
-    if not init.REALTIME:
-        video = cv2.VideoWriter(init.EXPORTED_VIDEO_NAME, cv2.VideoWriter_fourcc('Y', 'V', '1', '2'), init.FPS_CAP,
-                                (init.SCREEN_WIDTH, init.SCREEN_HEIGHT))
-
     while running:
         frame()
 
     # Save video
-    cv2.destroyAllWindows()
-    video.release()
+    if not init.REALTIME:
+        cv2.destroyAllWindows()
+        video.release()

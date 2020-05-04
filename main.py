@@ -39,7 +39,8 @@ def render_debug_information(tick_time, frame_time, event_time, video_time):
             "Rendered video frames: {:} (equals {:.2f} s)".format(rendered_video_frames,
                                                                   init.FPS_CAP ** -1 * rendered_video_frames), False,
             (0, 0, 0))
-    fish_count_surface = init.APP_FONT.render("Fish count: {:}".format(init.flock.population), False, (0, 0, 0))
+    fish_count_surface = init.APP_FONT.render(
+        "Fish count: {:}".format(np.sum([flock.population for flock in init.FLOCKS])), False, (0, 0, 0))
 
     y = 0
 
@@ -96,14 +97,15 @@ def frame():
     if not init.REALTIME:
         delta = 1000.0 / init.FPS_CAP
 
-    init.flock.do_frame(delta)
+    for flock in init.FLOCKS:
+        flock.do_frame(delta)
 
     if init.MOUSE_FISH:
-        init.flock.positions[0] = np.array(pg.mouse.get_pos())
-        init.flock.velocities[0] = clock.get_fps() * (init.flock.positions[0] - last_pos)
+        init.MOUSE_FISH_FLOCK.positions[0] = np.array(pg.mouse.get_pos())
+        init.MOUSE_FISH_FLOCK.velocities[0] = clock.get_fps() * (init.MOUSE_FISH_FLOCK.positions[0] - last_pos)
         # print(fish.positions[0], fish.velocities[0])
-        last_pos[0] = init.flock.positions[0][0]
-        last_pos[1] = init.flock.positions[0][1]
+        last_pos[0] = init.MOUSE_FISH_FLOCK.positions[0][0]
+        last_pos[1] = init.MOUSE_FISH_FLOCK.positions[0][1]
 
     tick_time = pg.time.get_ticks() - tick_time_start
 
@@ -111,34 +113,38 @@ def frame():
 
     screen.fill(init.BACKGROUND_COLOR)
 
-    for pos, dir in zip(init.flock.positions, init.flock.directions):
+    for flock in init.FLOCKS:
+        for pos, dir in zip(flock.positions, flock.directions):
 
-        # Compute those only when needed, improves performance a lot
-        if not pretty_render or display_bounding_boxes:
-            perp3d = np.cross((dir[0], dir[1], 0), (0, 0, 1))  # Perpendicular to direction vector
-            perp2d = (perp3d[0], perp3d[1]) / np.linalg.norm(perp3d)  # 2d version of that one
+            # Compute those only when needed, improves performance a lot
+            if not pretty_render or display_bounding_boxes:
+                perp3d = np.cross((dir[0], dir[1], 0), (0, 0, 1))  # Perpendicular to direction vector
+                perp2d = (perp3d[0], perp3d[1]) / np.linalg.norm(perp3d)  # 2d version of that one
 
-            # Vertices of rectangle representing fish boundaries
-            r_1 = pos - dir * init.FISH_WIDTH / 2 - perp2d * init.FISH_HEIGHT / 2
-            r_2 = r_1 + perp2d * init.FISH_HEIGHT
-            r_3 = r_2 + dir * init.FISH_WIDTH
-            r_4 = r_1 + dir * init.FISH_WIDTH
+                # Vertices of rectangle representing fish boundaries
+                r_1 = pos - dir * init.FISH_WIDTH / 2 - perp2d * init.FISH_HEIGHT / 2
+                r_2 = r_1 + perp2d * init.FISH_HEIGHT
+                r_3 = r_2 + dir * init.FISH_WIDTH
+                r_4 = r_1 + dir * init.FISH_WIDTH
 
-        if pretty_render:
-            angle_deg = np.rad2deg(np.arctan2(np.dot((1, 0), dir), dir[1])) + 90
-            screen.blit(pg.transform.rotate(pg.transform.flip(init.FISH_SPRITE, True, abs(angle_deg) > 90), angle_deg),
-                        pos + (-init.FISH_WIDTH / 2))
-        else:
-            pg.draw.polygon(screen, init.FISH_COLOR, (r_1, r_2, r_3, r_4))  # PyGame doesn't support non AA rectangles
-            pg.draw.line(screen, init.FISH_DIRECTION_COLOR, pos.astype(np.int32),
-                         pos.astype(np.int32) + dir * init.FISH_WIDTH, 2)
+            if pretty_render:
+                sprite = init.FISH_SPRITE.copy()
+                sprite.fill(flock.color, special_flags=pg.BLEND_ADD)
+                angle_deg = np.rad2deg(np.arctan2(np.dot((1, 0), dir), dir[1])) + 90
+                screen.blit(pg.transform.rotate(pg.transform.flip(sprite, True, abs(angle_deg) > 90), angle_deg),
+                            pos + (-init.FISH_WIDTH / 2))
+            else:
+                pg.draw.polygon(screen, init.FISH_COLOR,
+                                (r_1, r_2, r_3, r_4))  # PyGame doesn't support non AA rectangles
+                pg.draw.line(screen, init.FISH_DIRECTION_COLOR, pos.astype(np.int32),
+                             pos.astype(np.int32) + dir * init.FISH_WIDTH, 2)
 
-        if display_bounding_boxes:
-            pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_1, r_2)
-            pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_2, r_3)
-            pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_1, r_4)
-            pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_3, r_4)
-            pg.draw.circle(screen, init.FISH_CENTER_POINT_COLOR, pos.astype(np.int32), 1)
+            if display_bounding_boxes:
+                pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_1, r_2)
+                pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_2, r_3)
+                pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_1, r_4)
+                pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_3, r_4)
+                pg.draw.circle(screen, init.FISH_CENTER_POINT_COLOR, pos.astype(np.int32), 1)
 
     frame_time = pg.time.get_ticks() - frame_time_start
 

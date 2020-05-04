@@ -15,6 +15,7 @@ class Flock:
         self.directions = np.zeros((population, 2))
 
         self.dimensions = (800, 600)
+        self.color = (0, 0, 0, 255)
 
     def do_frame(self, millis=16.7):
         psi = np.array([[(vel_i - vel_j) / (1 + 1 / LENGTH_FACTOR ** 2 * np.linalg.norm(pos_i - pos_j) ** 2)
@@ -43,9 +44,9 @@ class Flock:
         if TORUS_WORLD:
             for pos, vel in zip(self.positions, self.velocities):
                 if pos[0] < 0:
-                    pos[0] = self.dimensions[0]-1
+                    pos[0] = self.dimensions[0] - 1
                 if pos[1] < 0:
-                    pos[1] = self.dimensions[1]-1
+                    pos[1] = self.dimensions[1] - 1
                 if pos[0] > self.dimensions[0]:
                     pos[0] = 1
                 if pos[1] > self.dimensions[1]:

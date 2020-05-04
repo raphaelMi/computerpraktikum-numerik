@@ -40,9 +40,29 @@ FISH_DIRECTION_COLOR = (0, 0, 255)
 FISH_SPRITE = pg.transform.smoothscale(fish_sprite, (FISH_WIDTH, FISH_HEIGHT))
 
 # Flock settings
-MOUSE_FISH = False  # makes the mouse cursor behave like a fish
 
-flock = Flock(100)
-flock.positions = np.random.normal((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 50, (flock.population, 2))
-flock.velocities = np.random.normal((0, 0), 100, (flock.population, 2))
-flock.dimensions = (SCREEN_WIDTH, SCREEN_HEIGHT)
+FLOCKS = []
+
+flock1 = Flock(15)
+flock1.positions = np.random.normal((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 25, (flock1.population, 2))
+flock1.velocities = np.random.normal((0, 0), 45, (flock1.population, 2))
+flock1.dimensions = (SCREEN_WIDTH, SCREEN_HEIGHT)
+
+flock2 = Flock(30)
+flock2.positions = np.random.normal((SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2 + 100), 45, (flock2.population, 2))
+flock2.velocities = np.random.normal((0, 0), 56, (flock2.population, 2))
+flock2.dimensions = (SCREEN_WIDTH, SCREEN_HEIGHT)
+flock2.color = (150, 0, 0, 255)
+
+flock3 = Flock(15)
+flock3.positions = np.random.normal((SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 100), 53, (flock3.population, 2))
+flock3.velocities = np.random.normal((0, 0), 76, (flock3.population, 2))
+flock3.dimensions = (SCREEN_WIDTH, SCREEN_HEIGHT)
+flock3.color = (46, 23, 0, 121)
+
+FLOCKS.append(flock1)
+FLOCKS.append(flock2)
+FLOCKS.append(flock3)
+
+MOUSE_FISH = True  # makes the mouse cursor behave like a fish
+MOUSE_FISH_FLOCK = flock1  # The flock influenced by the mouse

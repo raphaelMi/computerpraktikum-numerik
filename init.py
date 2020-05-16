@@ -24,7 +24,7 @@ APP_FONT = pg.font.SysFont('Comic Sans MS', 20)
 
 BACKGROUND_COLOR = (255, 255, 255,)
 
-SHOW_PLOTS_INITIALLY = True # Open plot window with program start
+SHOW_PLOTS_INITIALLY = True  # Open plot window with program start
 
 PLOT_WINDOW_TITLE = "Plots of simulation data"
 

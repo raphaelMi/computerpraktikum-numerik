@@ -6,6 +6,7 @@ import init
 import plotter
 import shared
 
+
 def initialize():
     global screen
     global last_pos
@@ -187,6 +188,7 @@ def frame():
         render_debug_information(tick_time, frame_time, event_time, video_process_time, plot_time)
 
     pg.display.update()
+
 
 if __name__ == "__main__":
     global running

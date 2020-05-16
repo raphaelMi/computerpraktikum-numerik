@@ -3,7 +3,8 @@ import numpy as np
 import pygame as pg
 
 import init
-
+import plotter
+import shared
 
 def initialize():
     global screen
@@ -24,14 +25,17 @@ def initialize():
         video = cv2.VideoWriter(init.EXPORTED_VIDEO_NAME, cv2.VideoWriter_fourcc('Y', 'V', '1', '2'), init.FPS_CAP,
                                 (init.SCREEN_WIDTH, init.SCREEN_HEIGHT))
 
+    plotter.setup()
 
-def render_debug_information(tick_time, frame_time, event_time, video_time):
+
+def render_debug_information(tick_time, frame_time, event_time, video_time, plot_time):
     fps = clock.get_fps()
 
-    fps_surface = init.APP_FONT.render("FPS: {:.2}/{:}".format(fps, init.FPS_CAP), False, (0, 0, 0))
+    fps_surface = init.APP_FONT.render("FPS: {:}/{:}".format(int(fps), init.FPS_CAP), False, (0, 0, 0))
     tick_time_surface = init.APP_FONT.render("Tick time: {:} ms".format(tick_time), False, (0, 0, 0))
     frame_time_surface = init.APP_FONT.render("Frame time: {:} ms".format(frame_time), False, (0, 0, 0))
     event_time_surface = init.APP_FONT.render("Event time: {:} ms".format(event_time), False, (0, 0, 0))
+
     if not init.REALTIME:
         video_process_time_surface = init.APP_FONT.render("Video process time: {:} ms".format(video_time), False,
                                                           (0, 0, 0))
@@ -39,6 +43,10 @@ def render_debug_information(tick_time, frame_time, event_time, video_time):
             "Rendered video frames: {:} (equals {:.2f} s)".format(rendered_video_frames,
                                                                   init.FPS_CAP ** -1 * rendered_video_frames), False,
             (0, 0, 0))
+
+    if shared.display_plots:
+        plot_time_surface = init.APP_FONT.render("Plot time: {:} ms".format(plot_time), False, (0, 0, 0))
+
     fish_count_surface = init.APP_FONT.render(
         "Fish count: {:}".format(np.sum([flock.population for flock in init.FLOCKS])), False, (0, 0, 0))
 
@@ -60,6 +68,10 @@ def render_debug_information(tick_time, frame_time, event_time, video_time):
         screen.blit(video_process_time_surface, (0, y))
         y += 25
         screen.blit(rendered_video_frames_surface, (0, y))
+        y += 25
+
+    if shared.display_plots:
+        screen.blit(plot_time_surface, (0, y))
         y += 25
 
     screen.blit(fish_count_surface, (0, y))
@@ -87,6 +99,11 @@ def frame():
                 display_debug_screen = not display_debug_screen
             elif event.key == pg.K_b:
                 display_bounding_boxes = not display_bounding_boxes
+            elif event.key == pg.K_g:
+                shared.display_plots = not shared.display_plots
+
+                if not shared.display_plots:
+                    plotter.close()
 
     event_time = pg.time.get_ticks() - event_time_start
 
@@ -159,11 +176,17 @@ def frame():
 
         video_process_time = pg.time.get_ticks() - video_process_time_start
 
+    plot_time = 0
+
+    if shared.display_plots:
+        plot_time_start = pg.time.get_ticks()
+        plotter.update_plot(init.FLOCKS)
+        plot_time = pg.time.get_ticks() - plot_time_start
+
     if display_debug_screen:
-        render_debug_information(tick_time, frame_time, event_time, video_process_time)
+        render_debug_information(tick_time, frame_time, event_time, video_process_time, plot_time)
 
     pg.display.update()
-
 
 if __name__ == "__main__":
     global running
@@ -173,13 +196,14 @@ if __name__ == "__main__":
     global video
     global rendered_video_frames
 
-    initialize()
-
     running = True
     pretty_render = True
     display_debug_screen = True
     display_bounding_boxes = False
     rendered_video_frames = 0
+    shared.display_plots = init.SHOW_PLOTS_INITIALLY
+
+    initialize()
 
     while running:
         frame()

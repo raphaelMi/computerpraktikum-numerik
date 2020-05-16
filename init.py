@@ -24,6 +24,10 @@ APP_FONT = pg.font.SysFont('Comic Sans MS', 20)
 
 BACKGROUND_COLOR = (255, 255, 255,)
 
+SHOW_PLOTS_INITIALLY = True # Open plot window with program start
+
+PLOT_WINDOW_TITLE = "Plots of simulation data"
+
 # Fish-specific settings
 FISH_WIDTH = 28
 FISH_HEIGHT = 10

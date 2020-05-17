@@ -102,6 +102,8 @@ def frame():
                 display_bounding_boxes = not display_bounding_boxes
             elif event.key == pg.K_g:
                 shared.display_plots = not shared.display_plots
+            elif event.key == pg.K_s:
+                init.MOUSE_SHARK = not init.MOUSE_SHARK
 
                 if not shared.display_plots:
                     plotter.close()

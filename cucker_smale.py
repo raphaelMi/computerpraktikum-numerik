@@ -1,7 +1,7 @@
 import numpy as np
 
 TORUS_WORLD = True
-LAMBDA = 10
+LAMBDA = 30
 LENGTH_FACTOR = 25
 SHARK_DIST = 100
 

@@ -20,11 +20,8 @@ class Flock:
         psi = np.array([[(vel_i - vel_j) / (1 + 1 / LENGTH_FACTOR ** 2 * np.linalg.norm(pos_i - pos_j) ** 2)
                          for pos_i, vel_i in zip(self.positions, self.velocities)]
                         for pos_j, vel_j in zip(self.positions, self.velocities)])
-        # print(psi)
 
         self.velocities += millis / 1000 * LAMBDA / self.population * np.sum(psi, axis=1)
-
-        # print(np.sum(self.velocities, axis=0))
 
         self.positions += millis / 1000 * self.velocities
         self.directions = self.velocities / np.linalg.norm(self.velocities, axis=1, keepdims=True)

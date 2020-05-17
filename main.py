@@ -104,6 +104,8 @@ def frame():
                 shared.display_plots = not shared.display_plots
             elif event.key == pg.K_s:
                 init.MOUSE_SHARK = not init.MOUSE_SHARK
+            elif event.key == pg.K_f:
+                init.MOUSE_FISH = not init.MOUSE_FISH
 
                 if not shared.display_plots:
                     plotter.close()

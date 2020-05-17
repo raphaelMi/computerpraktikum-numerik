@@ -25,6 +25,9 @@ def init_plot(flocks):
 
     fig, ax = plt.subplots(len(flocks))
 
+    if len(flocks) == 1:
+        ax = [ax]
+
     plt.subplots_adjust(hspace=1)
 
     fig.canvas.mpl_connect('close_event', on_close_event)
@@ -47,10 +50,10 @@ def update_plot(flocks):
         # clear() also removes axis descriptions, so we've to add it again
         axis.set_xlabel("Fish")
         axis.set_ylabel("Velocity")
-        axis.set_title("Flock " + str(i + 1))
+        axis.set_title("Flock " + str(i))
 
         # Plot a bar diagram
-        axis.bar([i for i in range(1, flock.population + 1)],
+        axis.bar([i for i in range(0, flock.population)],
                  [np.linalg.norm(flock.velocities[i]) for i in range(flock.population)],
                  color=np.asarray(flock.color).astype('float64') * 255 ** -1)
 

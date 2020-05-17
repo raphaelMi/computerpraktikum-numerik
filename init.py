@@ -20,11 +20,11 @@ EXPORTED_VIDEO_NAME = "rendered_scene.avi"
 
 APP_ICON = fish_icon
 APP_TITLE = "Flocking Simulation ({:}x{:})".format(SCREEN_WIDTH, SCREEN_HEIGHT)
-APP_FONT = pg.font.SysFont('Comic Sans MS', 20)
+APP_FONT = pg.font.SysFont('Courier New', 20)
 
 BACKGROUND_COLOR = (255, 255, 255,)
 
-PLOT_PAUSE_TIME = 0.001 # The time the plotter gets every frame to render (the simulation is paused during that)
+PLOT_PAUSE_TIME = 0.01 # The time the plotter gets every frame to render (the simulation is paused during that)
 SHOW_PLOTS_INITIALLY = True  # Open plot window with program start
 
 

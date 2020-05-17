@@ -21,6 +21,7 @@ def init_plot(flocks):
 
     plt.ion()  # Make plot non-blocking, we it can be updated while the simulation runs
     plt.show()
+    plt.pause(0.1)
 
     fig, ax = plt.subplots(len(flocks))
 
@@ -54,6 +55,7 @@ def update_plot(flocks):
                  color=np.asarray(flock.color).astype('float64') * 255 ** -1)
 
         plt.draw()
+        plt.pause(0.001)
 
 
 # Called my main when the plot should be closed

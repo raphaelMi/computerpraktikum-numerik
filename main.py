@@ -19,7 +19,7 @@ def initialize():
 
     clock = pg.time.Clock()
 
-    if init.MOUSE_FISH:
+    if init.MOUSE_FISH or init.MOUSE_SHARK:
         last_pos = np.array(pg.mouse.get_pos())
 
     if not init.REALTIME:
@@ -115,12 +115,20 @@ def frame():
     if not init.REALTIME:
         delta = 1000.0 / init.FPS_CAP
 
-    for flock in init.FLOCKS:
-        flock.do_frame(delta)
+    if init.MOUSE_SHARK:
+
+        for flock in init.FLOCKS:
+            flock.do_frame(delta, shark_pos=pg.mouse.get_pos())
+    else:
+        for flock in init.FLOCKS:
+            flock.do_frame(delta)
 
     if init.MOUSE_FISH:
         init.MOUSE_FISH_FLOCK.positions[0] = np.array(pg.mouse.get_pos())
         init.MOUSE_FISH_FLOCK.velocities[0] = clock.get_fps() * (init.MOUSE_FISH_FLOCK.positions[0] - last_pos)
+        if not np.linalg.norm(init.MOUSE_FISH_FLOCK.velocities[0]) == 0:
+            init.MOUSE_FISH_FLOCK.directions[0] = \
+                init.MOUSE_FISH_FLOCK.velocities[0] / np.linalg.norm(init.MOUSE_FISH_FLOCK.velocities[0])
         # print(fish.positions[0], fish.velocities[0])
         last_pos[0] = init.MOUSE_FISH_FLOCK.positions[0][0]
         last_pos[1] = init.MOUSE_FISH_FLOCK.positions[0][1]
@@ -148,7 +156,7 @@ def frame():
             if pretty_render:
                 sprite = init.FISH_SPRITE.copy()
                 sprite.fill(flock.color, special_flags=pg.BLEND_ADD)
-                angle_deg = np.rad2deg(np.arctan2(np.dot((1, 0), dir), dir[1])) + 90
+                angle_deg = np.rad2deg(np.arctan2(dir[0], dir[1])) + 90
                 screen.blit(pg.transform.rotate(pg.transform.flip(sprite, True, abs(angle_deg) > 90), angle_deg),
                             pos + (-init.FISH_WIDTH / 2))
             else:

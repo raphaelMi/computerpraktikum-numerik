@@ -3,6 +3,7 @@ import numpy as np
 TORUS_WORLD = True
 LAMBDA = 10
 LENGTH_FACTOR = 25
+SHARK_DIST = 100
 
 
 class Flock:
@@ -16,12 +17,18 @@ class Flock:
         self.dimensions = (800, 600)
         self.color = (0, 0, 0, 255)
 
-    def do_frame(self, millis=16.7):
+    def do_frame(self, millis=16.7, shark_pos=False):
         psi = np.array([[(vel_i - vel_j) / (1 + 1 / LENGTH_FACTOR ** 2 * np.linalg.norm(pos_i - pos_j) ** 2)
                          for pos_i, vel_i in zip(self.positions, self.velocities)]
                         for pos_j, vel_j in zip(self.positions, self.velocities)])
 
-        self.velocities += millis / 1000 * LAMBDA / self.population * np.sum(psi, axis=1)
+        shark_force = np.zeros((self.population, 2))
+
+        if shark_pos:
+            shark_force = np.array([(fish_pos - shark_pos) * SHARK_DIST**4 / np.linalg.norm(fish_pos - shark_pos)**4
+                                    for fish_pos in self.positions])
+
+        self.velocities += millis / 1000 * (LAMBDA / self.population * np.sum(psi, axis=1) + shark_force)
 
         self.positions += millis / 1000 * self.velocities
         self.directions = self.velocities / np.linalg.norm(self.velocities, axis=1, keepdims=True)

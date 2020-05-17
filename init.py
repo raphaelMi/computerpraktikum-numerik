@@ -24,8 +24,8 @@ APP_FONT = pg.font.SysFont('Courier New', 20)
 
 BACKGROUND_COLOR = (255, 255, 255,)
 
-PLOT_PAUSE_TIME = 0.01 # The time the plotter gets every frame to render (the simulation is paused during that)
-SHOW_PLOTS_INITIALLY = True  # Open plot window with program start
+PLOT_PAUSE_TIME = 0.001 # The time the plotter gets every frame to render (the simulation is paused during that)
+SHOW_PLOTS_INITIALLY = False  # Open plot window with program start
 
 
 PLOT_WINDOW_TITLE = "Plots of simulation data"
@@ -49,7 +49,7 @@ FISH_SPRITE = pg.transform.smoothscale(fish_sprite, (FISH_WIDTH, FISH_HEIGHT))
 
 FLOCKS = []
 
-flock1 = Flock(15)
+flock1 = Flock(60)
 flock1.positions = np.random.normal((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 25, (flock1.population, 2))
 flock1.velocities = np.random.normal((0, 0), 45, (flock1.population, 2))
 flock1.dimensions = (SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -67,8 +67,9 @@ flock3.dimensions = (SCREEN_WIDTH, SCREEN_HEIGHT)
 flock3.color = (46, 23, 0, 121)
 
 FLOCKS.append(flock1)
-FLOCKS.append(flock2)
-FLOCKS.append(flock3)
+# FLOCKS.append(flock2)
+# FLOCKS.append(flock3)
 
-MOUSE_FISH = True  # makes the mouse cursor behave like a fish
+MOUSE_FISH = False  # makes the mouse cursor behave like a fish
 MOUSE_FISH_FLOCK = flock1  # The flock influenced by the mouse
+MOUSE_SHARK = True  # makes the mouse cursor behave like a shark

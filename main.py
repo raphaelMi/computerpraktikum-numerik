@@ -19,8 +19,7 @@ def initialize():
 
     clock = pg.time.Clock()
 
-    if init.MOUSE_FISH or init.MOUSE_SHARK:
-        last_pos = np.array(pg.mouse.get_pos())
+    last_pos = np.array(pg.mouse.get_pos())
 
     if not init.REALTIME:
         video = cv2.VideoWriter(init.EXPORTED_VIDEO_NAME, cv2.VideoWriter_fourcc('Y', 'V', '1', '2'), init.FPS_CAP,

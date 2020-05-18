@@ -142,7 +142,7 @@ def frame():
 
     frame_time_start = pg.time.get_ticks()
 
-    screen.fill(init.BACKGROUND_COLOR) # Clear the screen - starting with rendering
+    screen.fill(init.BACKGROUND_COLOR)  # Clear the screen - starting with rendering
 
     for flock in init.FLOCKS:
         for pos, dir in zip(flock.positions, flock.directions):
@@ -158,7 +158,7 @@ def frame():
                 r_3 = r_2 + dir * init.FISH_WIDTH
                 r_4 = r_1 + dir * init.FISH_WIDTH
 
-            if pretty_render: # Render the colored fish sprite
+            if pretty_render:  # Render the colored fish sprite
                 sprite = init.FISH_SPRITE.copy()
                 sprite.fill(flock.color, special_flags=pg.BLEND_ADD) # Color the fish
                 angle_deg = np.rad2deg(np.arctan2(dir[0], dir[1])) + 90 # Turn the fish
@@ -181,7 +181,7 @@ def frame():
 
     video_process_time = 0
 
-    if not init.REALTIME: # Write the rendered frame to the exported video file (if enabled)
+    if not init.REALTIME:  # Write the rendered frame to the exported video file (if enabled)
         video_process_time_start = pg.time.get_ticks()
 
         video.write(np.frombuffer(pg.image.tostring(screen.copy(), "RGB"), np.uint8).reshape(init.SCREEN_HEIGHT,
@@ -192,12 +192,12 @@ def frame():
 
     plot_time = 0
 
-    if shared.display_plots: # Update the plots, if enabled
+    if shared.display_plots:  # Update the plots, if enabled
         plot_time_start = pg.time.get_ticks()
         plotter.update_plot(init.FLOCKS)
         plot_time = pg.time.get_ticks() - plot_time_start
 
-    if display_debug_screen: # Render the debug screen
+    if display_debug_screen:  # Render the debug screen
         render_debug_information(tick_time, frame_time, event_time, video_process_time, plot_time)
 
     pg.display.update()

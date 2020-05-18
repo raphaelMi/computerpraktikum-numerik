@@ -46,7 +46,6 @@ FISH_DIRECTION_COLOR = (0, 0, 255)
 FISH_SPRITE = pg.transform.smoothscale(fish_sprite, (FISH_WIDTH, FISH_HEIGHT))
 
 # Flock settings
-
 FLOCKS = []
 
 flock1 = Flock(15)
@@ -70,6 +69,11 @@ FLOCKS.append(flock1)
 FLOCKS.append(flock2)
 FLOCKS.append(flock3)
 
+# Model settings
+TORUS_WORLD = True  # Set to true if fishes leaving the window will be placed at the opposite sides
+LAMBDA = 30  # A factor determining the interaction strength between the fishes
+LENGTH_FACTOR = 25  # The ratio between pixels and simulation length units
+SHARK_DIST = 100  # The distance at which the shark influences the fish
 MOUSE_FISH = False  # makes the mouse cursor behave like a fish
 MOUSE_FISH_FLOCK = flock1  # The flock influenced by the mouse
 MOUSE_SHARK = True  # makes the mouse cursor behave like a shark

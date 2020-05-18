@@ -21,7 +21,7 @@ def init_plot(flocks):
 
     plt.ion()  # Make plot non-blocking, we it can be updated while the simulation runs
     plt.show()
-    plt.pause(init.PLOT_PAUSE_TIME)
+    plt.pause(init.PLOT_PAUSE_TIME) # Gives matplotlib a bit time to process the changes
 
     fig, ax = plt.subplots(len(flocks))
 
@@ -30,7 +30,7 @@ def init_plot(flocks):
 
     plt.subplots_adjust(hspace=1)
 
-    fig.canvas.mpl_connect('close_event', on_close_event)
+    fig.canvas.mpl_connect('close_event', on_close_event) # An event called when the user closes the window
     fig.canvas.set_window_title(init.PLOT_WINDOW_TITLE)
 
     plot_visible = True

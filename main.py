@@ -13,7 +13,7 @@ def initialize():
     global clock
     global video
 
-    screen = pg.display.set_mode((init.SCREEN_WIDTH, init.SCREEN_HEIGHT))
+    screen = pg.display.set_mode((init.SCREEN_WIDTH, init.SCREEN_HEIGHT)) # Init the window
     pg.display.set_icon(init.APP_ICON)
     pg.display.set_caption(init.APP_TITLE)
 
@@ -21,13 +21,13 @@ def initialize():
 
     last_pos = np.array(pg.mouse.get_pos())
 
-    if not init.REALTIME:
+    if not init.REALTIME: # Init the video exporter
         video = cv2.VideoWriter(init.EXPORTED_VIDEO_NAME, cv2.VideoWriter_fourcc('Y', 'V', '1', '2'), init.FPS_CAP,
                                 (init.SCREEN_WIDTH, init.SCREEN_HEIGHT))
 
     plotter.setup()
 
-
+# Renders various debug informations every frame
 def render_debug_information(tick_time, frame_time, event_time, video_time, plot_time):
     fps = clock.get_fps()
 
@@ -77,7 +77,7 @@ def render_debug_information(tick_time, frame_time, event_time, video_time, plot
     screen.blit(fish_count_surface, (0, y))
     y += 25
 
-
+# Called every game tick/frame
 def frame():
     global running
     global pretty_render
@@ -85,10 +85,11 @@ def frame():
     global display_bounding_boxes
     global rendered_video_frames
 
-    clock.tick(init.FPS_CAP)
+    clock.tick(init.FPS_CAP) # The clock makes sure we're at fixed FPS
 
-    event_time_start = pg.time.get_ticks()
+    event_time_start = pg.time.get_ticks() # Time measurement for debug screen
 
+    # Process various events - pressed keys and so on
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
@@ -114,10 +115,10 @@ def frame():
 
     tick_time_start = pg.time.get_ticks()
 
-    delta = clock.get_time()
+    delta = clock.get_time() # The delta time used for the explicit euler integration, determined by the clock
 
     if not init.REALTIME:
-        delta = 1000.0 / init.FPS_CAP
+        delta = 1000.0 / init.FPS_CAP # In video mode, we use a fixed delta
 
     if init.MOUSE_SHARK:
 
@@ -127,6 +128,7 @@ def frame():
         for flock in init.FLOCKS:
             flock.do_frame(delta)
 
+    # One fish position and velocity will be determined by the mouse (if the feature is enabled)
     if init.MOUSE_FISH:
         init.MOUSE_FISH_FLOCK.positions[0] = np.array(pg.mouse.get_pos())
         init.MOUSE_FISH_FLOCK.velocities[0] = clock.get_fps() * (init.MOUSE_FISH_FLOCK.positions[0] - last_pos)
@@ -140,7 +142,7 @@ def frame():
 
     frame_time_start = pg.time.get_ticks()
 
-    screen.fill(init.BACKGROUND_COLOR)
+    screen.fill(init.BACKGROUND_COLOR) # Clear the screen - starting with rendering
 
     for flock in init.FLOCKS:
         for pos, dir in zip(flock.positions, flock.directions):
@@ -156,19 +158,19 @@ def frame():
                 r_3 = r_2 + dir * init.FISH_WIDTH
                 r_4 = r_1 + dir * init.FISH_WIDTH
 
-            if pretty_render:
+            if pretty_render: # Render the colored fish sprite
                 sprite = init.FISH_SPRITE.copy()
-                sprite.fill(flock.color, special_flags=pg.BLEND_ADD)
-                angle_deg = np.rad2deg(np.arctan2(dir[0], dir[1])) + 90
+                sprite.fill(flock.color, special_flags=pg.BLEND_ADD) # Color the fish
+                angle_deg = np.rad2deg(np.arctan2(dir[0], dir[1])) + 90 # Turn the fish
                 screen.blit(pg.transform.rotate(pg.transform.flip(sprite, True, abs(angle_deg) > 90), angle_deg),
                             pos + (-init.FISH_WIDTH / 2))
-            else:
+            else: # Render the simple fish rectangles with direction vector
                 pg.draw.polygon(screen, init.FISH_COLOR,
                                 (r_1, r_2, r_3, r_4))  # PyGame doesn't support non AA rectangles
                 pg.draw.line(screen, init.FISH_DIRECTION_COLOR, pos.astype(np.int32),
                              pos.astype(np.int32) + dir * init.FISH_WIDTH, 2)
 
-            if display_bounding_boxes:
+            if display_bounding_boxes: # Render midpoint and bounding boxes of the fishes
                 pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_1, r_2)
                 pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_2, r_3)
                 pg.draw.line(screen, init.FISH_BOUNDING_BOX_COLOR, r_1, r_4)
@@ -179,7 +181,7 @@ def frame():
 
     video_process_time = 0
 
-    if not init.REALTIME:
+    if not init.REALTIME: # Write the rendered frame to the exported video file (if enabled)
         video_process_time_start = pg.time.get_ticks()
 
         video.write(np.frombuffer(pg.image.tostring(screen.copy(), "RGB"), np.uint8).reshape(init.SCREEN_HEIGHT,
@@ -190,12 +192,12 @@ def frame():
 
     plot_time = 0
 
-    if shared.display_plots:
+    if shared.display_plots: # Update the plots, if enabled
         plot_time_start = pg.time.get_ticks()
         plotter.update_plot(init.FLOCKS)
         plot_time = pg.time.get_ticks() - plot_time_start
 
-    if display_debug_screen:
+    if display_debug_screen: # Render the debug screen
         render_debug_information(tick_time, frame_time, event_time, video_process_time, plot_time)
 
     pg.display.update()

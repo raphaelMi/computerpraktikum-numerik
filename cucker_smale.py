@@ -47,7 +47,5 @@ class Flock:
                     pos[1] = 1
 
         v_bar = np.sum(self.velocities, axis=0) / self.population
-        print(self.velocities)
-        print(v_bar)
         self.deviations.append(np.sum(np.linalg.norm(self.velocities - v_bar, axis=1)))
-        print(self.deviations[-1])
+

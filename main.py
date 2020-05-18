@@ -109,7 +109,7 @@ def frame():
                 init.MOUSE_FISH = not init.MOUSE_FISH
             elif event.key == pg.K_k:
                 plotter.draw_curves(init.FLOCKS[0].deviations)
-                print(init.FLOCKS[0].deviations)
+
     event_time = pg.time.get_ticks() - event_time_start
 
     tick_time_start = pg.time.get_ticks()
@@ -133,7 +133,6 @@ def frame():
         if not np.linalg.norm(init.MOUSE_FISH_FLOCK.velocities[0]) == 0:
             init.MOUSE_FISH_FLOCK.directions[0] = \
                 init.MOUSE_FISH_FLOCK.velocities[0] / np.linalg.norm(init.MOUSE_FISH_FLOCK.velocities[0])
-        # print(fish.positions[0], fish.velocities[0])
         last_pos[0] = init.MOUSE_FISH_FLOCK.positions[0][0]
         last_pos[1] = init.MOUSE_FISH_FLOCK.positions[0][1]
 

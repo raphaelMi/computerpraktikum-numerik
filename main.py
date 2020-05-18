@@ -101,14 +101,15 @@ def frame():
                 display_bounding_boxes = not display_bounding_boxes
             elif event.key == pg.K_g:
                 shared.display_plots = not shared.display_plots
+                if not shared.display_plots:
+                    plotter.close()
             elif event.key == pg.K_s:
                 init.MOUSE_SHARK = not init.MOUSE_SHARK
             elif event.key == pg.K_f:
                 init.MOUSE_FISH = not init.MOUSE_FISH
-
-                if not shared.display_plots:
-                    plotter.close()
-
+            elif event.key == pg.K_k:
+                plotter.draw_curves(init.FLOCKS[0].deviations)
+                print(init.FLOCKS[0].deviations)
     event_time = pg.time.get_ticks() - event_time_start
 
     tick_time_start = pg.time.get_ticks()

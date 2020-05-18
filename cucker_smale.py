@@ -17,6 +17,8 @@ class Flock:
         self.dimensions = (800, 600)
         self.color = (0, 0, 0, 255)
 
+        self.deviations = []
+
     def do_frame(self, millis=16.7, shark_pos=False):
         psi = np.array([[(vel_i - vel_j) / (1 + 1 / LENGTH_FACTOR ** 2 * np.linalg.norm(pos_i - pos_j) ** 2)
                          for pos_i, vel_i in zip(self.positions, self.velocities)]
@@ -43,3 +45,9 @@ class Flock:
                     pos[0] = 1
                 if pos[1] > self.dimensions[1]:
                     pos[1] = 1
+
+        v_bar = np.sum(self.velocities, axis=0) / self.population
+        print(self.velocities)
+        print(v_bar)
+        self.deviations.append(np.sum(np.linalg.norm(self.velocities - v_bar, axis=1)))
+        print(self.deviations[-1])

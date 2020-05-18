@@ -33,7 +33,7 @@ def init_plot(flocks):
     plot_visible = True
 
 
-# Called my main every frame
+# Called by main every frame
 def update_plot(flocks):
     if not plot_visible:
         init_plot(flocks)
@@ -72,3 +72,10 @@ def on_close_event(arg):
 
     shared.display_plots = False
     plot_visible = False
+
+
+# Draw a curve of the deviations in velocity
+def draw_curves(data):
+    # plt.ion()  # Make plot non-blocking, we it can be updated while the simulation runs
+    plt.plot(data)
+    plt.show()
